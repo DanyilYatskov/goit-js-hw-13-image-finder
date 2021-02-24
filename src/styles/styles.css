@@ -74,3 +74,7 @@ p {
 .is-hidden {
   display: none;
 }
+.stats-item {
+  align-items: flex-end;
+  text-align: center;
+}
