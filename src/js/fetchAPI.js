@@ -1,4 +1,18 @@
+import refs from './refs';
+import { info, alert } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
+import * as Confirm from '@pnotify/confirm';
+import '@pnotify/confirm/dist/PNotifyConfirm.css';
+
 const myKey = '20320156-7ced8cd7704588c90dd479ccb';
+
+function notice(type, header, message) {
+  type({
+    title: header,
+    text: message,
+  });
+}
 
 export default {
   searchTag: '',
@@ -12,9 +26,20 @@ export default {
           return response.json();
         }
       })
-      .then(({ hits }) => {
+      .then(response => {
+        if (response.hits.length == 0) {
+          notice(
+            alert,
+            'No matches found',
+            'There is No images with such tag please try again',
+          );
+          return;
+        }
+        if (response.total > 12) {
+          refs.moreImagesBtnRef.classList.remove('is-hidden');
+        }
         this.page += 1;
-        return hits;
+        return response.hits;
       });
   },
   resetPageToFirst() {
