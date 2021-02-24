@@ -1,26 +1,27 @@
-<ul class="gallery">
-    {{#each this}}
-    <div class="photo-card">
-        <img src="{{webformatURL}}" alt="image" />
+{{#each this}}
+<li class="gallery-item">
+    {{!-- <div class="photo-card"> --}}
 
+        <img src="{{webformatURL}}" alt="image" class="gallery-image" data-source="{{largeImageURL}}" />
         <div class="stats">
             <p class="stats-item">
                 <i class="material-icons">{{likes}}</i>
-
+                {{likes}}
             </p>
             <p class="stats-item">
                 <i class="material-icons">{{views}}</i>
-
+                {{views}}
             </p>
             <p class="stats-item">
                 <i class="material-icons">{{comments}}</i>
-
+                {{comments}}
             </p>
             <p class="stats-item">
                 <i class="material-icons">{{downloads}}</i>
-
+                {{downloads}}
             </p>
         </div>
-    </div>
-    {{/each}}
-</ul>
+        {{!--
+    </div> --}}
+</li>
+{{/each}}
