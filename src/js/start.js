@@ -3,39 +3,25 @@ import fetchAPI from './fetchAPI';
 import render from './renderGallery';
 import * as basicLightbox from 'basiclightbox';
 import '../styles/basicLightbox.min.css';
-function onFormSubmit(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
-}
-refs.searchFormRef.addEventListener('submit', event => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const searchTag = form.elements.query.value;
-  fetchAPI.tag = searchTag;
-  refs.galleryRef.innerHTML = '';
-  refs.moreImagesBtnRef.classList.add('is-hidden');
-  fetchAPI.resetPageToFirst();
-  // fetchAPI.fetchImages().then(hits => {
-  //   if (hits.length == 0) {
-  //     return;
-  //   }
-  //   refs.moreImagesBtnRef.classList.remove('is-hidden');
-  //   return render(hits, refs.galleryRef);
-  // });
-  fetchImages();
-});
-refs.moreImagesBtnRef.addEventListener('click', moreImagesOnClick);
-function moreImagesOnClick() {
-  // fetchAPI.fetchImages().then(hits => render(hits, refs.galleryRef));
-  // window.scrollTo({
-  //   top: document.documentElement.offsetHeight,
-  //   behavior: 'smooth',
-  // });
-  fetchImages();
+import { info, alert } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
+import * as Confirm from '@pnotify/confirm';
+import '@pnotify/confirm/dist/PNotifyConfirm.css';
+function notice(type, header, message) {
+  type({
+    title: header,
+    text: message,
+  });
 }
 function fetchImages() {
   fetchAPI.fetchImages().then(hits => {
     if (hits.length == 0) {
+      notice(
+        alert,
+        'No matches found',
+        'There is No images with such tag please try again',
+      );
       return;
     }
     render(hits, refs.galleryRef);
@@ -46,6 +32,22 @@ function fetchImages() {
     });
   });
 }
+function onSubmit(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const searchTag = form.elements.query.value;
+  fetchAPI.tag = searchTag;
+  refs.galleryRef.innerHTML = '';
+  refs.moreImagesBtnRef.classList.add('is-hidden');
+  fetchAPI.resetPageToFirst();
+  fetchImages();
+}
+refs.searchFormRef.addEventListener('submit', onSubmit);
+refs.moreImagesBtnRef.addEventListener('click', moreImagesOnClick);
+function moreImagesOnClick() {
+  fetchImages();
+}
+
 function onImageClick(event) {
   if (event.target.nodeName !== 'IMG') {
     return;
