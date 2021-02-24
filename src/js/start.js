@@ -11,8 +11,15 @@ refs.searchFormRef.addEventListener('submit', event => {
   const searchTag = form.elements.query.value;
   fetchAPI.tag = searchTag;
   refs.galleryRef.innerHTML = '';
+  refs.moreImagesBtnRef.classList.add('is-hidden');
   fetchAPI.resetPageToFirst();
-  fetchAPI.fetchImages().then(hits => render(hits, refs.galleryRef));
+  fetchAPI.fetchImages().then(hits => {
+    if (hits.length == 0) {
+      return;
+    }
+    refs.moreImagesBtnRef.classList.remove('is-hidden');
+    return render(hits, refs.galleryRef);
+  });
 });
 refs.moreImagesBtnRef.addEventListener('click', moreImagesOnClick);
 function moreImagesOnClick() {
